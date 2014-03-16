@@ -1,0 +1,22 @@
+<form class="form-horizontal form-signin" method="post" id="userForm" action="/reg">
+  <div class="alert hidden" id="message"></div>
+  <fieldset>
+    <div class="form-group">
+        <label for="username">邮件地址</label>
+        <input type="text" id="username" name="username"  class="form-control" placeholder="邮件地址">
+        <p class="help-block">你的邮件地址，用于登录和显示</p>
+    </div>
+    <div class="form-group">
+      <label for="password">登陆密码</label>
+      <input type="password" class="form-control" id="password" name="password" placeholder="登陆密码">
+    </div>
+    <div class="form-group">
+      <label for="password-repeat">确认密码</label>
+      <input type="password" class="form-control" id="passwordRepeat" name="passwordRepeat"  placeholder="确认密码">
+    </div>
+    <div class="form-group">
+      <button type="button" id="regBtn" class="btn btn-lg btn-primary btn-block">注册</button>
+    </div>
+  </fieldset>
+</form>
+<script type="text/javascript" src="/js/module/userService.js"></script>
