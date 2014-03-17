@@ -1,10 +1,14 @@
 (function($){
 	var userValidate;
 
-	function start(){
+	function reg(){
 		bindEvent();
 		validate();
 	};
+
+	function login(){
+		
+	}
 
 	function bindEvent(){
 		$("#regBtn").click(function(){
@@ -12,7 +16,7 @@
 				return;
 			}
 
-			$.post("/reg",
+			$.post("/user/reg",
 				$("#userForm").serialize(),
 				function(data){
 					if(data.status){
@@ -51,6 +55,4 @@
 			}
 		});
 	}
-
-	start();
 })(jQuery);
