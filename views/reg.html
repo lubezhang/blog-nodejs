@@ -1,6 +1,5 @@
 <form class="form-horizontal form-signin" method="post" id="userForm" action="/reg">
   <div class="alert hidden" id="message"></div>
-  <fieldset>
     <div class="form-group">
         <label for="username">邮件地址</label>
         <input type="text" id="username" name="username"  class="form-control" placeholder="邮件地址">
@@ -17,6 +16,8 @@
     <div class="form-group">
       <button type="button" id="regBtn" class="btn btn-lg btn-primary btn-block">注册</button>
     </div>
-  </fieldset>
 </form>
 <script type="text/javascript" src="/js/module/userService.js"></script>
+<script type="text/javascript">
+  reg();
+</script>
