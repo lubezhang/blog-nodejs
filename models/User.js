@@ -15,9 +15,8 @@ User.prototype.save = function save(callback){
 	});
 };
 
-User.query = function(user, callback){
-	delete user.password;
-	mongodb.queryOne("user",user, function(err, user){
+User.find = function(user, callback){
+	mongodb.findOne("user",user, function(err, user){
 		callback(err, user);
 	});
 };

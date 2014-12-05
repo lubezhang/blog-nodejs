@@ -1,5 +1,12 @@
 body {
 	background-color: #eee;
+  font-family: "Helvetica Neue",Helvetica,"Hiragino Sans GB","Wenquanyi Micro Hei","Microsoft Yahei",Arial,sans-serif;
+}
+
+.user_avatar img {
+  box-shadow: 0 1px 2px hsla(0,0%,0%,.5);
+  width: 30px;
+  height: 30px;
 }
 
 .form-signin {
@@ -36,4 +43,41 @@ input[type="color"].error,
 }
 label.error{
 	color:#f00;
+}
+
+.main{
+  margin: 30px auto;
+}
+
+.panel{
+  border-radius: 0px;
+  box-shadow: 0 1px 1px hsla(0,0%,40%,.47);
+  border:0;
+  padding: 0;
+}
+
+.panel .cell{
+  padding: 0 10px 0 10px;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  height: 50px;
+  line-height: 50px;
+}
+.panel .header {
+  padding: 7px 10px;
+  background-color: #F5F5F5;
+  box-shadow: 0 1px 0 #e0e0e0;
+}
+.panel .inner {
+  line-height: 2em;
+  padding: 10px;
+}
+
+.cell div{
+  margin-left: 10px;
+}
+
+.cell a.topic-title{
+  color: #333;
+  font-size:14px;
 }

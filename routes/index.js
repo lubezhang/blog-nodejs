@@ -1,26 +1,24 @@
+var mongodb = require("../models/db");
+var indexRouter = require("./indexRouter");
+
 module.exports = function(app){
 	app.get('/', function(req, res) {
-		res.render('index', { title: '首页' });
+		indexRouter.getIndexData(function(err, topicLists){
+			res.render('index', { title: '首页',"topicLists":topicLists, user:req.session.user});
+		});
 	});
-	// app.get(/^\/\w+\S*$/i, function(req, res, next) {
-	// 	var ctrl;
-	// 	try{
-	// 		ctrl = require("./"+req.path.split("/")[1]+".js");
-	// 		console.log("ctrl="+ctrl);
-	// 		if(ctrl){
-	// 			ctrl.router(app);
-	// 		}			
-	// 	} catch(e){
-	// 		next();
-	// 	}
-	// });
-	
+
+	app.get('/logout', function(req, res) {
+		delete req.session.user;
+		res.redirect("/");
+	});
 	
 	// 注册路由规则
-	var routerList = ["user"];
+	var routerList = ["user", "topic"];
 	for(var i = 0, len = routerList.length; i < len; i++){
 		app.set("moduleName", routerList[i]);
-		require("./"+routerList[i]+".js").router(app);
+		require("./"+routerList[i]+"Router.js").router(app);
+		console.log(routerList[i] +"Router is load!");
 	}
 	
 	return app.router;

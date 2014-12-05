@@ -1,41 +1,49 @@
 var settings = require("../settings");
-// var mongodb = require('mongodb');
-// var Db = require("mongodb").Db;
-// var connection = require("mongodb").Connection;
-// var mongodbServer = require("mongodb").Server;
 
-// module.exports = new Db(settings.db, new mongodbServer(settings.host,connection.DEFAULT_PORT,{}));
 var mongodb = require('mongodb');
-var server = new mongodb.Server(settings.host,settings.port,{auto_reconnect:true});
-var mongodb = new mongodb.Db(settings.db,server,{safe:true});
-
-// db.open(function(err,db){
-// 	if(!err){
-// 		console.log("mongodb connect success");
-// 		module.exports = db;
-// 	} else {
-// 		console.log("mongodb connect error: %s", err);
-// 	}
-// });
+var server  = new mongodb.Server(settings.host,settings.port,{auto_reconnect:true});
+var mongodb = new mongodb.Db(settings.dbName,server,{safe:true});
 
 var MongodbUtils = function (){
 	function connectDb(callback){
 		
 	};
 
-	function connectCollection(tableName, callback){
-		mongodb.open(function(err, db){
-			if(err){
-				return callback(err);
-			}
+	function closeCollection(){
+		console.log("<<<<<<<<<<<< 关闭mongodb连接 <<<<<<<<<<<<");
+		mongodb.close();
+	}
 
-			db.collection(tableName, function(err,collection){
+	function connectCollection(tableName, callback){
+		console.log(">>>>>>>>>>>> 打开mongodb连接 >>>>>>>>>>>>");
+		mongodb.open(function(err, db){
+			if(settings.develop){
 				if(err){
-					mongodb.close();
 					return callback(err);
 				}
-				callback(err,collection);
-			});
+
+				db.collection(tableName, function(err,collection){
+					if(err){
+						closeCollection();
+						return callback(err);
+					}
+					callback(err,collection);
+				});
+			} else {
+				db.authenticate(settings.dbUserName, settings.dbPassword, function(err, result) { 
+					if(err){
+						return callback(err);
+					}
+
+					db.collection(tableName, function(err,collection){
+						if(err){
+							closeCollection();
+							return callback(err);
+						}
+						callback(err,collection);
+					});
+				});
+			}
 		});
 	};
 
@@ -46,14 +54,23 @@ var MongodbUtils = function (){
 	 * @param  {Function} callback  查询完成后的回调函数
 	 * @return {[type]}             [description]
 	 */
-	function queryOne(tableName, model, callback){
+	function findOne(tableName, model, callback){
 		connectCollection(tableName, function(err,collection){
 			collection.findOne(model, function(err, model){
-				mongodb.close();
+				closeCollection();
 				callback(err, model);
 			});
 		});
 	};
+
+	function findAll(tableName, page, callback){
+		connectCollection(tableName, function(err,collection){
+			collection.find({}).toArray(function(err, model){
+				closeCollection();
+				callback(err, model);
+			}) 
+		});
+	}
 
 	/**
 	 * [insert description]
@@ -65,7 +82,7 @@ var MongodbUtils = function (){
 	function insert(tableName, model, callback){
 		connectCollection(tableName, function(err,collection){
 			collection.insert(model, {safe:true}, function(err, model){
-				mongodb.close();
+				closeCollection();
 				callback(err, model);
 			});
 		});
@@ -73,12 +90,14 @@ var MongodbUtils = function (){
 
 	return{
 		insert:insert,
-		queryOne:queryOne
+		findOne:findOne,
+		findAll:findAll
 	}
 }
 
 
 var mongodbUtils = new MongodbUtils();
 
-exports.insert = mongodbUtils.insert;
-exports.queryOne = mongodbUtils.queryOne;
+exports.insert  = mongodbUtils.insert;
+exports.findOne = mongodbUtils.findOne;
+exports.findAll = mongodbUtils.findAll;
